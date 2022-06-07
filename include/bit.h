@@ -6,7 +6,7 @@
 
 typedef struct BITFILE {
 	int offset;
-  uint8_t buffer;
+    uint8_t buffer;
 	FILE * fp;
 } BITFILE;
 
@@ -17,7 +17,7 @@ typedef enum TYPE {
 
 BITFILE * bopen(char * filename, char * mode);
 void bclose(BITFILE *bf);
-void flushBF(BITFILE *bf);
+void bflush(BITFILE *bf);
 void bread(TYPE type, BITFILE *bf, void * data, int bitSize, int length);
 void bwrite(TYPE type, BITFILE *bf, void * data, int bitSize, int length);
 

@@ -22,7 +22,7 @@ int getMaskedBit(int shift){
 }
 
 //BitBuffer 내용 다 출력
-void flushBF(BITFILE *bf){
+void bflush(BITFILE *bf){
 	fwrite(&bf->buffer, 1, 1, bf->fp);
 }
 //BitBuffer 초기화
@@ -67,7 +67,7 @@ void fillBF(BITFILE * bf){
 
 void checkBF(BITFILE * bf){
 	if(!isFullBF(bf)) return;
-	flushBF(bf);
+	bflush(bf);
 	clearBF(bf);
 }
 
