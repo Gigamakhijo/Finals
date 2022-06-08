@@ -1,5 +1,14 @@
 #!/bin/bash
 
-mkdir build bins
+mkdir build dist
+
+set -e
+
 cmake -B`pwd`/build -S`pwd`
-cd build && make && mv encoder.out ../bins && mv decoder.out ../bins
+cd build 
+make 
+chmod +x encoder.out 
+chmod +x decoder.out
+
+mv encoder.out ../dist 
+mv decoder.out ../dist

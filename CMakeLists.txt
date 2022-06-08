@@ -4,11 +4,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(${CMAKE_SOURCE_DIR} include)
 
-add_library(lib include/lib/encoding.c include/lib/encoding.h 
-                include/lib/compression.c include/lib/compression.h
-                include/lib/ecc.c include/lib/ecc.h
-                include/lib/bit.c include/lib/bit.h
-                include/lib/utils.c include/lib/utils.h)
+add_library(lib src/encoding.c include/encoding.h 
+                src/compression.c include/compression.h
+                src/ecc.c include/ecc.h
+                src/bit.c include/bit.h
+                src/utils.c include/utils.h)
 
 add_executable(encoder.out src/encoder.c)
 target_link_libraries(encoder.out lib)
