@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mkdir build bins
+mkdir build dist
 
 set -e
 
@@ -10,5 +10,5 @@ make
 chmod +x encoder.out 
 chmod +x decoder.out
 
-mv encoder.out ../bins 
-mv decoder.out ../bins
+mv encoder.out ../dist 
+mv decoder.out ../dist
