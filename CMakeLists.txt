@@ -4,7 +4,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(${CMAKE_SOURCE_DIR} include)
 
-add_library(lib src/encoding.c include/encoding.h 
+add_library(lib src/text.c include/text.h 
+                src/encoding.c include/encoding.h 
                 src/compression.c include/compression.h
                 src/ecc.c include/ecc.h
                 src/bit.c include/bit.h
