@@ -4,7 +4,7 @@
 
 ### void bread(TYPE type, BITFILE *bf, void * data, int bitSize, int length);
 >  파일에서 데이터를 bitSize만큼 length번 읽어서 data 변수에 대입.
->  
+>
 >  이때, data의 타입은 type변수에 적어준다. (INT, CHAR)
 
 ### void bwrite(TYPE type, BITFILE *bf, void * data, int bitSize, int length);
