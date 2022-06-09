@@ -1,18 +1,22 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.5.0)
 project(finals C)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include_directories(${CMAKE_SOURCE_DIR} include)
+enable_testing()
 
-add_library(lib src/text.c include/text.h 
-                src/encoding.c include/encoding.h 
-                src/compression.c include/compression.h
-                src/ecc.c include/ecc.h
-                src/bit.c include/bit.h
-                src/utils.c include/utils.h)
+add_library(core src/core.h src/text.c src/text.h
+            src/queue.c src/queue.h
+            src/bit.c src/bit.h
+            src/utils.c src/utils.h)
 
 add_executable(encoder.out src/encoder.c)
-target_link_libraries(encoder.out lib)
-
+target_link_libraries(encoder.out core)
 add_executable(decoder.out src/decoder.c)
-target_link_libraries(decoder.out lib)
+target_link_libraries(decoder.out core)
+
+add_executable(test_text test/test_text.c)
+target_link_libraries(test_text core)
+target_include_directories(test_text PUBLIC ${PROJECT_SOURCE_DIR}/src)
+
+add_test(test_read_text sh -c "./test_text ../data/data.txt")

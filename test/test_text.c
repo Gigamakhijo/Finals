@@ -1,6 +1,8 @@
 #include <stdio.h>
 
-#include "core.h"
+#include "queue.h"
+#include "text.h"
+#include "utils.h"
 
 int main(int argc, char *argv[]) {
   FILE *fp = fopen(argv[1], "r");
@@ -44,7 +46,7 @@ int main(int argc, char *argv[]) {
   }
   putchar('\n');
 
-  printf("%s", user.description);
+  printf("%s\n", user.description);
 
   free_queue(user.items);
   free_queue(user.friends);

@@ -1,4 +1,5 @@
 #include "text.h"
+#include "queue.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,23 +7,25 @@
 
 #define STRSIZE 200
 #define MAXUSER 200
+#define MAXDESCRIPTION 1000
 
-#define test_zero(cond) \
-  if ((cond) == 0) return -1;
-#define test_null(cond) \
-  if ((cond) == NULL) return -1;
-#define test_neg(cond) \
-  if ((cond) == -1) return -1;
+#define TEST_ZERO(cond)                                                        \
+  if ((cond) == 0)                                                             \
+    return -1;
+#define TEST_NULL(cond)                                                        \
+  if ((cond) == NULL)                                                          \
+    return -1;
 
 char *item_keys[ITEMCOUNT] = {
     "BOMB: ", "POTION: ", "CURE: ", "BOOK: ", "SHIELD: ", "CANNON: "};
 
-static char *StringGetField(char *name, char *str) {
+static char *sget_field(char *name, char *str) {
   // strip newline
   int n = strlen(name);
   str[strlen(str) - 1] = '\0';
 
-  if (strncmp(str, name, n) != 0) return NULL;
+  if (strncmp(str, name, n) != 0)
+    return NULL;
 
   char tmp[STRSIZE];
   strcpy(tmp, str);
@@ -31,121 +34,111 @@ static char *StringGetField(char *name, char *str) {
   return str;
 }
 
-static char *GetField(char *name, char *str, FILE *fp) {
-  if (fgets(str, STRSIZE, fp) == NULL) return NULL;
-  return StringGetField(name, str);
+static char *get_field(char *name, char *str, FILE *fp) {
+  if (fgets(str, STRSIZE, fp) == NULL)
+    return NULL;
+  return sget_field(name, str);
 }
 
-int ReadText(Data *data, FILE *fp) {
+int read_text(User *user, FILE *fp) {
   char str[STRSIZE];
 
-  User user = data->user_status.user;
-  Status status = data->user_status.status;
+  TEST_NULL(fgets(str, STRSIZE, fp));
+  TEST_ZERO(!strcmp(str, "*USER STATUS*\n"));
 
-  test_null(fgets(str, STRSIZE, fp));
-  test_zero(!strcmp(str, "*USER STATUS*\n"));
+  TEST_NULL(get_field("ID: ", user->id, fp));
 
-  test_null(GetField("ID: ", str, fp));
-  strcpy(user.id, str);
+  TEST_NULL(get_field("NAME: ", user->name, fp));
 
-  test_null(GetField("NAME: ", str, fp));
-  strcpy(user.name, str);
+  TEST_NULL(get_field("GENDER: ", user->gender, fp));
 
-  test_null(GetField("GENDER: ", str, fp));
-  strcpy(user.gender, str);
+  TEST_NULL(get_field("AGE: ", str, fp));
+  user->age = atoi(str);
 
-  test_null(GetField("AGE: ", str, fp));
-  user.age = atoi(str);
+  TEST_NULL(get_field("HP: ", str, fp));
+  user->hp = atoi(str);
 
-  test_null(GetField("HP: ", str, fp));
-  status.hp = atoi(str);
+  TEST_NULL(get_field("MP: ", str, fp));
+  user->mp = atoi(str);
 
-  test_null(GetField("MP: ", str, fp));
-  status.mp = atoi(str);
+  TEST_NULL(get_field("COIN: ", str, fp));
+  user->coin = atoi(str);
 
-  test_null(GetField("COIN: ", str, fp));
-  status.coin = atoi(str);
+  if (fgetc(fp) != '\n')
+    return -1;
 
-  printf("%s\n%s\n%s\n%d %d %d %d\n", user.id, user.name, user.gender, user.age,
-         status.hp, status.mp, status.coin);
+  TEST_NULL(fgets(str, STRSIZE, fp));
+  TEST_ZERO(!strcmp(str, "*ITEMS*\n"));
 
-  data->user_status.user = user;
-  data->user_status.status = status;
+  user->items = new_queue();
 
-  if (fgetc(fp) != '\n') return -1;
-
-  Item *items = (Item *)malloc(sizeof(Item) * ITEMCOUNT);
-  test_null(fgets(str, STRSIZE, fp));
-  test_zero(!strcmp(str, "*ITEMS*\n"));
-
+  Item *item;
+  char *key;
   int count = 0;
   while (fgets(str, STRSIZE, fp) != NULL && *str != '\n' && count < ITEMCOUNT) {
-    char *key;
     for (int i = 0; i < ITEMCOUNT; i++) {
       key = item_keys[i];
-      if (strncmp(str, key, strlen(key)) == 0) break;
+      if (strncmp(str, key, strlen(key)) == 0)
+        break;
     }
+    item = new_item();
+    strcpy(item->name, key);
 
-    test_null(StringGetField(key, str));
+    TEST_NULL(sget_field(key, str));
+    item->count = atoi(str);
 
-    items[count].name = key;
-    items[count].count = atoi(str);
+    enqueue(user->items, item);
     count++;
   }
 
-  data->items.count = count;
-  data->items.item_list = items;
+  TEST_NULL(fgets(str, STRSIZE, fp));
+  TEST_ZERO(!strcmp(str, "*FRIENDS LIST*\n"));
 
-  putchar('\n');
-  for (int i = 0; i < count; i++)
-    printf("%s%d\n", items[i].name, items[i].count);
+  user->friends = new_queue();
 
-  User *users = (User *)malloc(sizeof(User) * MAXUSER);
-
-  int i = 0;
+  count = 0;
   char field[STRSIZE];
   int len = 0;
 
-  test_null(fgets(str, STRSIZE, fp));
-  test_zero(!strcmp(str, "*FRIENDS LIST*\n"));
-
+  Friend *friend;
   do {
-    sprintf(field, "FRIEND%d ", i + 1);
+    sprintf(field, "FRIEND%d ", count++ + 1);
     len = strlen(field);
 
-    test_null(fgets(str, STRSIZE, fp));
-    if (strcmp(str, "*DESCRIPTION*\n") == 0) break;
+    TEST_NULL(fgets(str, STRSIZE, fp));
+    if (strcmp(str, "*DESCRIPTION*\n") == 0)
+      break;
+
+    friend = new_friend();
 
     strcat(field, "ID: ");
-    test_null(StringGetField(field, str));
-    strcpy(users[i].id, str);
+    TEST_NULL(sget_field(field, str));
+    strcpy(friend->id, str);
     field[len] = '\0';
 
     strcat(field, "NAME: ");
-    test_null(GetField(field, str, fp));
-    strcpy(users[i].name, str);
+    TEST_NULL(get_field(field, str, fp));
+    strcpy(friend->name, str);
     field[len] = '\0';
 
     strcat(field, "GENDER: ");
-    test_null(GetField(field, str, fp));
-    strcpy(users[i].gender, str);
+    TEST_NULL(get_field(field, str, fp));
+    strcpy(friend->gender, str);
     field[len] = '\0';
 
     strcat(field, "AGE: ");
-    test_null(GetField(field, str, fp));
-    users[i].age = atoi(str);
+    TEST_NULL(get_field(field, str, fp));
+    friend->age = atoi(str);
     field[len] = '\0';
 
-    i++;
+    enqueue(user->friends, friend);
   } while (fgets(str, STRSIZE, fp) != NULL && *str == '\n');
 
-  data->friends_list.friends_list = users;
-  data->friends_list.count = i;
+  char description[MAXDESCRIPTION];
 
-  putchar('\n');
-  for (int i = 0; i < data->friends_list.count; i++)
-    printf("FRIEND%d ID: %s NAME: %s GENDER: %s AGE: %d\n", i + 1, users[i].id,
-           users[i].name, users[i].gender, users[i].age);
+  fread(description, sizeof(char), MAXDESCRIPTION, fp);
+
+  user->description = description;
 
   return 0;
 }

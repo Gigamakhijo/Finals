@@ -5,6 +5,6 @@
 
 #include "utils.h"
 
-int ReadText(Data *data, FILE *fp);
+int read_text(User *user, FILE *fp);
 
 #endif
