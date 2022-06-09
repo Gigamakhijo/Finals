@@ -6,9 +6,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 enable_testing()
 
 add_library(core src/core.h src/text.c src/text.h
-            src/queue.c src/queue.h
-            src/bit.c src/bit.h
-            src/utils.c src/utils.h)
+                            src/queue.c src/queue.h
+                            src/bit.c src/bit.h
+                            src/utils.c src/utils.h)
 
 add_executable(encoder.out src/encoder.c)
 target_link_libraries(encoder.out core)
