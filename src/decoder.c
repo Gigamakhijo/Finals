@@ -1,3 +1,9 @@
 #include "bit.h"
 
-int main() { return 0; }
+int main() {
+  // read_bits();
+  // remove_ecc();
+  // decompress();
+  // decode();
+  // write_text();
+}
