@@ -13,7 +13,7 @@ int main() {
 	User *user;
 
 	BITFILE* bf = NULL;
-	bf = bopen("encoded_data1.modified","rb");
+	bf = bopen("data.encoded","rb");
 
 	char c;
 

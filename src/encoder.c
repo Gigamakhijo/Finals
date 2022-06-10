@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
   Item *item;
   Friend *friend;
 
-  BITFILE *bf = bopen("encoded_data1", "wb");
+  BITFILE *bf = bopen("data.encoded", "wb");
 
   char next = ',';
   int g_buffer;

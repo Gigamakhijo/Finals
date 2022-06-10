@@ -4,5 +4,5 @@ mkdir build bins
 
 set -e
 
-cmake -S . -B build
+cmake -DCMAKE_BUILD_TYPE=Debug  -S . -B build
 make -C build
