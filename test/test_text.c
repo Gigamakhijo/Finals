@@ -2,6 +2,9 @@
 
 #include "core.h"
 
+#include <assert.h>
+#include <string.h>
+
 int main(int argc, char *argv[]) {
   FILE *fp = fopen(argv[1], "r");
   if (!fp) {
@@ -16,16 +19,13 @@ int main(int argc, char *argv[]) {
   } else
     fclose(fp);
 
-  printf("id: %s\n", user.id);
-  printf("name: %s\n", user.name);
-  printf("gender: %s\n", user.gender);
-  printf("age: %d\n", user.age);
-  printf("hp: %d\n", user.hp);
-  printf("mp: %d\n", user.mp);
-  printf("coin: %d\n", user.coin);
-
-  printf("id: %d\n", user.coin);
-  putchar('\n');
+  assert(strcmp(user.id, "KMU_CS23") == 0);
+  assert(strcmp(user.name, "HONG CHAN PARK") == 0);
+  assert(strcmp(user.gender, "FEMALE") == 0);
+  assert(user.age == 33);
+  assert(user.hp == 200);
+  assert(user.mp == 5);
+  assert(user.coin == 43210);
 
   Item *item;
   while (q_len(user.items) > 0) {
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
   }
   putchar('\n');
 
-  printf("%s", user.description);
+  printf("%s\n", user.description);
 
   free_queue(user.items);
   free_queue(user.friends);
