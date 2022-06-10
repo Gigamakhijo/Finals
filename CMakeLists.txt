@@ -20,3 +20,4 @@ target_link_libraries(test_text core)
 target_include_directories(test_text PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
 add_test(test_read_text sh -c "./test_text ../data/data.txt")
+add_test(encoder.out sh -c "./encoder.out ../data/data.txt")

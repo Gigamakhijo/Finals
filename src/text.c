@@ -134,11 +134,7 @@ int read_text(User *user, FILE *fp) {
     enqueue(user->friends, friend);
   } while (fgets(str, STRSIZE, fp) != NULL && *str == '\n');
 
-  char description[MAXDESCRIPTION];
-
-  fread(description, sizeof(char), MAXDESCRIPTION, fp);
-
-  user->description = description;
+  fread(user->description, sizeof(char), MAXDESCRIPTION, fp);
 
   return 0;
 }

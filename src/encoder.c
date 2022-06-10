@@ -1,6 +1,7 @@
-#include <stdio.h>
-
 #include "core.h"
+
+#include <stdio.h>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
   FILE *fp = fopen(argv[1], "r");
@@ -16,35 +17,83 @@ int main(int argc, char *argv[]) {
   } else
     fclose(fp);
 
-  printf("id: %s\n", user.id);
-  printf("name: %s\n", user.name);
-  printf("gender: %s\n", user.gender);
-  printf("age: %d\n", user.age);
-  printf("hp: %d\n", user.hp);
-  printf("mp: %d\n", user.mp);
-  printf("coin: %d\n", user.coin);
-
-  printf("id: %d\n", user.coin);
-  putchar('\n');
-
   Item *item;
-  while (q_len(user.items) > 0) {
-    item = dequeue(user.items);
-    printf("%s%d\n", item->name, item->count);
-    free_item(item);
-  }
-  putchar('\n');
-
   Friend *friend;
-  for (int i = 1; q_len(user.friends) > 0; i++) {
-    friend = dequeue(user.friends);
-    printf("FRIEND%d ID: %s NAME: %s GENDER: %s AGE: %d\n", i, friend->id,
-           friend->name, friend->gender, friend->age);
-    free_friend(friend);
-  }
-  putchar('\n');
 
-  printf("%s", user.description);
+  BITFILE *bf = bopen("encoded_data1", "wb");
+
+  char next = ',';
+  int g_buffer;
+  int fg_buffer;
+  int item_len;
+  int friend_len;
+  int i_buffer;
+
+  char *str_male = "MALE";
+  char *str_female = "FEMALE";
+  if (strcmp(user.gender, str_male) == 0)
+    g_buffer = 0;
+  else if (strcmp(user.gender, str_female) == 0)
+    g_buffer = 1;
+
+  bwrite(CHAR, bf, user.id, 7, strlen(user.id));
+  bwrite(CHAR, bf, &next, 7, 1);
+  bwrite(CHAR, bf, user.name, 7, strlen(user.name));
+  bwrite(CHAR, bf, &next, 7, 1);
+  bwrite(INT, bf, &g_buffer, 1, 1);
+  bwrite(INT, bf, &user.age, 7, 1);
+  bwrite(INT, bf, &user.hp, 8, 1);
+  bwrite(INT, bf, &user.mp, 8, 1);
+  bwrite(INT, bf, &user.coin, 16, 1);
+
+  char *bomb = "BOMB";
+  char *potion = "POTION";
+  char *cure = "CURE";
+  char *book = "BOOK";
+  char *shield = "SHIELD";
+  char *cannon = "CANNON";
+
+  item_len = q_len(user.items);
+  bwrite(INT, bf, &item_len, 3, 1);
+
+  for (int i = 0; i < item_len; i++) {
+    item = dequeue(user.items);
+    if (strcmp(item->name, bomb) == 0)
+      i_buffer = 0;
+    else if (strcmp(item->name, potion) == 0)
+      i_buffer = 1;
+    else if (strcmp(item->name, cure) == 0)
+      i_buffer = 2;
+    else if (strcmp(item->name, book) == 0)
+      i_buffer = 3;
+    else if (strcmp(item->name, shield) == 0)
+      i_buffer = 4;
+    else if (strcmp(item->name, cannon) == 0)
+      i_buffer = 5;
+
+    bwrite(INT, bf, &i_buffer, 3, 1);
+    bwrite(INT, bf, &item->count, 8, 1);
+  }
+
+  friend_len = q_len(user.friends);
+  bwrite(INT, bf, &friend_len, 7, 1);
+  for (int i = 0; i < friend_len; i++) {
+    friend = dequeue(user.friends);
+
+    bwrite(CHAR, bf, friend->id, 7, strlen(friend->id));
+    bwrite(CHAR, bf, &next, 1, 7);
+    bwrite(CHAR, bf, friend->name, 7, strlen(friend->name));
+    bwrite(CHAR, bf, &next, 1, 7);
+    if (strcmp(friend->gender, str_male) == 0) {
+      fg_buffer = 0;
+    } else if (strcmp(friend->gender, str_female) == 0) {
+      fg_buffer = 1;
+    }
+    bwrite(INT, bf, &fg_buffer, 1, 1);
+    bwrite(INT, bf, &friend->age, 7, 1);
+  }
+
+  bwrite(CHAR, bf, user.description, 7, strlen(user.description));
 
   free_queue(user.items);
   free_queue(user.friends);
