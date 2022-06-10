@@ -35,17 +35,17 @@ int main(int argc, char *argv[]) {
     g_buffer = 0;
   else if (strcmp(user.gender, str_female) == 0)
     g_buffer = 1;
-
+	printf("id : %s length : %ld\n", user.id, strlen(user.id));
+	printf("name : %s length : %ld\n", user.name, strlen(user.name));
   bwrite(CHAR, bf, user.id, 7, strlen(user.id));
   bwrite(CHAR, bf, &next, 7, 1);
-  bwrite(CHAR, bf, user.name, 7, strlen(user.name));
+ 	bwrite(CHAR, bf, user.name, 7, strlen(user.name));
   bwrite(CHAR, bf, &next, 7, 1);
   bwrite(INT, bf, &g_buffer, 1, 1);
   bwrite(INT, bf, &user.age, 7, 1);
   bwrite(INT, bf, &user.hp, 8, 1);
   bwrite(INT, bf, &user.mp, 8, 1);
   bwrite(INT, bf, &user.coin, 16, 1);
-
   char *bomb = "BOMB";
   char *potion = "POTION";
   char *cure = "CURE";
@@ -81,9 +81,9 @@ int main(int argc, char *argv[]) {
     friend = dequeue(user.friends);
 
     bwrite(CHAR, bf, friend->id, 7, strlen(friend->id));
-    bwrite(CHAR, bf, &next, 1, 7);
+    bwrite(CHAR, bf, &next, 7, 1);
     bwrite(CHAR, bf, friend->name, 7, strlen(friend->name));
-    bwrite(CHAR, bf, &next, 1, 7);
+    bwrite(CHAR, bf, &next, 7, 1);
     if (strcmp(friend->gender, str_male) == 0) {
       fg_buffer = 0;
     } else if (strcmp(friend->gender, str_female) == 0) {
@@ -92,9 +92,11 @@ int main(int argc, char *argv[]) {
     bwrite(INT, bf, &fg_buffer, 1, 1);
     bwrite(INT, bf, &friend->age, 7, 1);
   }
-
+	printf("%s\n", user.description);
+	printf("\nlength : %ld", strlen(user.description));
   bwrite(CHAR, bf, user.description, 7, strlen(user.description));
-
+	bflush(bf);
+	bclose(bf);
   free_queue(user.items);
   free_queue(user.friends);
 }
