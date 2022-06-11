@@ -5,5 +5,6 @@
 #include "queue.h"
 #include "text.h"
 #include "utils.h"
+#include "correction.h"
 
 #endif
