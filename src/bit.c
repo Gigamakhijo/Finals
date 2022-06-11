@@ -21,7 +21,7 @@ void clearBF(BITFILE *bf) {
 int getMaskedBit(int shift) { return (int)((1 << shift) - 1); }
 
 // BitBuffer 내용 다 출력
-void bflush(BITFILE *bf) { fwrite(&bf->buffer, 1, 1, bf->fp); }
+void bflush(BITFILE *bf) { if(bf->offset>0) fwrite(&bf->buffer, 1, 1, bf->fp); }
 // BitBuffer 초기화
 BITFILE *bopen(char *filename, char *mode) {
   FILE *fp = fopen(filename, mode);
