@@ -168,9 +168,9 @@ void write_text(User *user, char * output){
   for (int k = 0; k < friend_count; k++) {
       Friend * friend  = dequeue(user->friends);
       fprintf(fp, "FRIEND%d ID: %s\n", k+1, friend->id);
-      fprintf(fp, "FRIEND%d ID: %s\n", k+1, friend->name);
-      fprintf(fp, "FRIEND%d ID: %s\n", k+1, friend->gender);
-      fprintf(fp, "FRIEND%d ID: %d\n", k+1, friend->age);
+      fprintf(fp, "FRIEND%d NAME: %s\n", k+1, friend->name);
+      fprintf(fp, "FRIEND%d GENDER: %s\n", k+1, friend->gender);
+      fprintf(fp, "FRIEND%d AGE: %d\n", k+1, friend->age);
       fputc('\n', fp);
   }
 
