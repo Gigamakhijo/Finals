@@ -7,5 +7,6 @@
 #include "utils.h"
 #include "correction.h"
 #include "fivot.h"
+#include "protocol.h"
 
 #endif

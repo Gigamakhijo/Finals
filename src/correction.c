@@ -1,4 +1,5 @@
 #include "correction.h"
+#include <stdlib.h>
 #include "bit.h"
 
 int checkPowerOfTwo(int num){
