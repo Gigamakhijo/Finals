@@ -17,6 +17,7 @@ void read_user(BITFILE* bf, User* user){
         if(id_buffer == ',') break;
         user->id[id_index++] = id_buffer;
     }
+    user->id[id_index] = '\0';
 	
 	while(1){
 	    char name_buffer;
@@ -25,6 +26,7 @@ void read_user(BITFILE* bf, User* user){
 		if(name_buffer == ',') break;
 		user->name[name_index++] = name_buffer; 
     }
+    user->name[name_index] = '\0';
 
 	bread(INT, bf, &gender, 1, 1);
 	if(gender == 0)
@@ -85,12 +87,14 @@ void read_friend(BITFILE* bf, User* user){
             }
 			friend->id[id_index++] = buffer;
         }
+        friend->id[id_index] = '\0';
         while(1){
             char buffer;
             bread(CHAR, bf, &buffer, 7, 1);
             if(buffer == ',') break;
 			friend->name[name_index++] = buffer;
         }
+        friend->name[name_index] = '\0';
 		bread(INT, bf, &gender, 1, 1);
 		if(gender == 0){
 			strcpy(friend->gender, "MALE");
@@ -115,7 +119,7 @@ void read_description(BITFILE* bf, User* user){
         if(buffer == '\0') break;
         user->description[index++] = buffer;
     }
-    
+    user->description[index] = '\0';
 	return;
 }
 
