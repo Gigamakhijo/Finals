@@ -175,7 +175,7 @@ void write_text(User *user, char * output){
   }
 
   fputs("*DESCRIPTION*\n", fp);
-  fprintf(fp, "%s\n", user->description);
+  fprintf(fp, "%s", user->description);
 
   fclose(fp);
 
