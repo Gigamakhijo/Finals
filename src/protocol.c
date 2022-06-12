@@ -247,37 +247,38 @@ void revert_protocol(char *input, char * output) {
 
     bclose(rbf);
 
+    write_text(&user, output);
     // read description
-    printf("%s\n", user.id);
-    printf("%s\n", user.name);
-    printf("%s\n", user.gender);
-    printf("%d\n", user.age);
-    printf("%d\n", user.hp);
-    printf("%d\n", user.mp);
-    printf("%d\n", user.coin);
+    // printf("%s\n", user.id);
+    // printf("%s\n", user.name);
+    // printf("%s\n", user.gender);
+    // printf("%d\n", user.age);
+    // printf("%d\n", user.hp);
+    // printf("%d\n", user.mp);
+    // printf("%d\n", user.coin);
 
-	int ITEM_count = q_len(user.items);
-    printf("ITEM COUNT : %d\n", ITEM_count);
+	// int ITEM_count = q_len(user.items);
+    // printf("ITEM COUNT : %d\n", ITEM_count);
 
-    for (int k = 0; k < ITEM_count; k++) {
-        Item * item = dequeue(user.items);
-        printf("%s : ", item->name);
-        printf("%d\n", item->count);
-    }
+    // for (int k = 0; k < ITEM_count; k++) {
+    //     Item * item = dequeue(user.items);
+    //     printf("%s : ", item->name);
+    //     printf("%d\n", item->count);
+    // }
 
-	int FRIEND_count = q_len(user.friends);
-    printf("\n%d\n", FRIEND_count);
+	// int FRIEND_count = q_len(user.friends);
+    // printf("\n%d\n", FRIEND_count);
 
-    for (int k = 0; k < FRIEND_count; k++) {
-        Friend * friend  = dequeue(user.friends);
-        printf("%s / ", friend->id);
-        printf("%s / ", friend->name);
-        printf("%s / ", friend->gender);
-        printf("%d / ", friend->age);
-        printf("\n\n");
-    }
+    // for (int k = 0; k < FRIEND_count; k++) {
+    //     Friend * friend  = dequeue(user.friends);
+    //     printf("%s / ", friend->id);
+    //     printf("%s / ", friend->name);
+    //     printf("%s / ", friend->gender);
+    //     printf("%d / ", friend->age);
+    //     printf("\n\n");
+    // }
 
-    printf("%s\n", user.description);
+    // printf("%s\n", user.description);
 
     
     free_queue(user.items);

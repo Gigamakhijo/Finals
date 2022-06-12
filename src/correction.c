@@ -97,15 +97,8 @@ int decodeParity(int n, int p, int data, int checked){
 void convert_correction(char * input, char * output){
     BITFILE *rbp, *wbp;
     rbp = bopen(input, "rb");
-    if(rbp==NULL){
-        fprintf(stderr, "파일열기 실패");
-        exit(1);
-    }
     wbp = bopen(output, "wb");
-    if(wbp==NULL){
-        fprintf(stderr, "파일열기 실패");
-        exit(1);
-    }
+    
     char buffer;
     int parity;
 
