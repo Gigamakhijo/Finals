@@ -6,5 +6,6 @@
 #include "text.h"
 #include "utils.h"
 #include "correction.h"
+#include "fivot.h"
 
 #endif
