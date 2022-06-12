@@ -93,7 +93,7 @@ int decodeParity(int n, int p, int data, int checked){
     return result;
 }
 
-void convertParity(char * input, char * output){
+void convert_correction(char * input, char * output){
     BITFILE *rbp, *wbp;
     rbp = bopen(input, "rb");
     if(rbp==NULL){
@@ -120,7 +120,7 @@ void convertParity(char * input, char * output){
     bclose(rbp);
 }
 
-void revertParity(char * input, char * output){
+void revert_correction(char * input, char * output){
     BITFILE *rbp, *wbp;
     rbp = bopen(input, "rb");
     wbp = bopen(output, "wb"); 
