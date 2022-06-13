@@ -1,5 +1,6 @@
 #include "pivot.h"
 #include "bit.h"
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -78,7 +79,7 @@ void free_pivot_bitmap(int **bitmap, int chunk_size) {
   free(bitmap);
 }
 
-void convert_pivot(char *input, char *output) {
+void pivot_encode(char *input, char *output) {
   int chunk = filesize(input);
   int **bitmap = new_bitmap(chunk);
   BITFILE *rbf, *wbf;
@@ -96,7 +97,7 @@ void convert_pivot(char *input, char *output) {
   bclose(rbf);
 }
 
-void revert_pivot(char *input, char *output) {
+void pivot_decode(char *input, char *output) {
   int chunk = filesize(input);
   int **bitmap = new_pivot_bitmap(chunk);
 
