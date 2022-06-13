@@ -13,7 +13,7 @@ add_library(core src/core.h src/text.c src/text.h
                             src/bwt.c src/bwt.h
                             src/mtf.c src/mtf.h
                             src/pivot.c src/pivot.h
-                            src/protocol.c src/protocol.h)
+                            src/bin.c src/bin.h)
 
 add_executable(encoder.out src/encoder.c)
 target_link_libraries(encoder.out core)
