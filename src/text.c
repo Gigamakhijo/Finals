@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define STRSIZE 200
-#define MAXUSER 200
-#define MAXDESCRIPTION 1000
+#define STRSIZE 1000
+#define MAXUSER 255
+#define MAXDESCRIPTION 1001
 
 #define TEST_ZERO(cond)                                                        \
   if ((cond) == 0)                                                             \
@@ -134,8 +134,17 @@ int read_text(User *user, FILE *fp) {
     enqueue(user->friends, friend);
   } while (fgets(str, STRSIZE, fp) != NULL && *str == '\n');
 
-  fread(user->description, sizeof(char), MAXDESCRIPTION, fp);
+  int index = 0;
 
+  while(1){
+    char buffer = fgetc(fp);
+    if(feof(fp) == 1) break;
+    user->description[index++] = buffer;
+  }
+  user->description[index] = '\0';
+
+  // fread(user->description, sizeof(char), MAXDESCRIPTION, fp);
+  // user->description[strlen(user->description)-1] = '\0';
   return 0;
 }
 

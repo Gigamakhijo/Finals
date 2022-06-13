@@ -3,6 +3,7 @@
 
 int main(int argc, char *argv[]) {
   convert_protocol(argv[1], "encoder.protocol");
+  //compress
   convert_correction("encoder.protocol", "encoder.correction");
   convert_fivot("encoder.correction", "encoder.fivot");
 
