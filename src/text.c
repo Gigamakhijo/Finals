@@ -136,9 +136,10 @@ int read_text(User *user, FILE *fp) {
 
   int index = 0;
 
-  while(1){
+  while (1) {
     char buffer = fgetc(fp);
-    if(feof(fp) == 1) break;
+    if (feof(fp) == 1)
+      break;
     user->description[index++] = buffer;
   }
   user->description[index] = '\0';
@@ -148,26 +149,27 @@ int read_text(User *user, FILE *fp) {
   return 0;
 }
 
-void write_text(User *user, char * output){
+void write_text(User *user, char *output) {
   FILE *fp;
   fp = fopen(output, "w");
-  if(fp==NULL) exit(1);
+  if (fp == NULL)
+    exit(1);
   fputs("*USER STATUS*\n", fp);
-  fprintf(fp, "ID: %s\n",user->id);
-  fprintf(fp, "NAME: %s\n",user->name);
-  fprintf(fp, "GENDER: %s\n",user->gender);
-  fprintf(fp, "AGE: %d\n",user->age);
-  fprintf(fp, "HP: %d\n",user->hp);
-  fprintf(fp, "MP: %d\n",user->mp);
-  fprintf(fp, "COIN: %d\n",user->coin);
+  fprintf(fp, "ID: %s\n", user->id);
+  fprintf(fp, "NAME: %s\n", user->name);
+  fprintf(fp, "GENDER: %s\n", user->gender);
+  fprintf(fp, "AGE: %d\n", user->age);
+  fprintf(fp, "HP: %d\n", user->hp);
+  fprintf(fp, "MP: %d\n", user->mp);
+  fprintf(fp, "COIN: %d\n", user->coin);
   fputc('\n', fp);
 
   fputs("*ITEMS*\n", fp);
 
   int item_count = q_len(user->items);
   for (int k = 0; k < item_count; k++) {
-      Item * item = dequeue(user->items);
-      fprintf(fp, "%s: %d\n", item->name, item->count);
+    Item *item = dequeue(user->items);
+    fprintf(fp, "%s: %d\n", item->name, item->count);
   }
   fputc('\n', fp);
 
@@ -175,17 +177,16 @@ void write_text(User *user, char * output){
 
   int friend_count = q_len(user->friends);
   for (int k = 0; k < friend_count; k++) {
-      Friend * friend  = dequeue(user->friends);
-      fprintf(fp, "FRIEND%d ID: %s\n", k+1, friend->id);
-      fprintf(fp, "FRIEND%d NAME: %s\n", k+1, friend->name);
-      fprintf(fp, "FRIEND%d GENDER: %s\n", k+1, friend->gender);
-      fprintf(fp, "FRIEND%d AGE: %d\n", k+1, friend->age);
-      fputc('\n', fp);
+    Friend *friend = dequeue(user->friends);
+    fprintf(fp, "FRIEND%d ID: %s\n", k + 1, friend->id);
+    fprintf(fp, "FRIEND%d NAME: %s\n", k + 1, friend->name);
+    fprintf(fp, "FRIEND%d GENDER: %s\n", k + 1, friend->gender);
+    fprintf(fp, "FRIEND%d AGE: %d\n", k + 1, friend->age);
+    fputc('\n', fp);
   }
 
   fputs("*DESCRIPTION*\n", fp);
   fprintf(fp, "%s", user->description);
 
   fclose(fp);
-
 }

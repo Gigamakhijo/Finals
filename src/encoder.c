@@ -3,11 +3,11 @@
 
 int main(int argc, char *argv[]) {
   convert_protocol(argv[1], "encoder.protocol");
-  //compress
+  // compress
   convert_correction("encoder.protocol", "encoder.correction");
-  convert_fivot("encoder.correction", "encoder.fivot");
+  convert_pivot("encoder.correction", "encoder.pivot");
 
   remove("encoder.protocol");
   remove("encoder.correction");
-  rename("encoder.fivot", "encoded_data");
+  rename("encoder.pivot", "encoded_data");
 }
