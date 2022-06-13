@@ -2,7 +2,7 @@
 
 source scripts/build.sh
 
-cd build
+cd build && ctest
 
 echo "original:"
 cat ../data/data.txt
