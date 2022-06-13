@@ -1,7 +1,7 @@
 #ifndef LZSS_H
 #define LZSS_H
 
-void compress(const char *src, const char *dst);
-void decompress(const char *src, const char *dst);
+void compress(char *src, char *dst);
+void decompress(char *src, char *dst);
 
 #endif
