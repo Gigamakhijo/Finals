@@ -1,5 +1,6 @@
-#include "correction.h"
+#include "ecc.h"
 #include "bit.h"
+
 #include <stdlib.h>
 
 int checkPowerOfTwo(int num) { return !(num & (num - 1)); }
@@ -91,7 +92,7 @@ int decodeParity(int n, int p, int data, int checked) {
   return result;
 }
 
-void convert_correction(char *input, char *output) {
+void ecc_encode(char *input, char *output) {
   BITFILE *rbp, *wbp;
   rbp = bopen(input, "rb");
   wbp = bopen(output, "wb");
@@ -111,7 +112,7 @@ void convert_correction(char *input, char *output) {
   bclose(rbp);
 }
 
-void revert_correction(char *input, char *output) {
+void ecc_decode(char *input, char *output) {
   BITFILE *rbp, *wbp;
   rbp = bopen(input, "rb");
   wbp = bopen(output, "wb");

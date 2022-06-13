@@ -9,7 +9,7 @@ add_library(core src/core.h src/text.c src/text.h
                             src/queue.c src/queue.h
                             src/bit.c src/bit.h
                             src/utils.c src/utils.h
-                            src/correction.c src/correction.h
+                            src/ecc.c src/ecc.h
                             src/bwt.c src/bwt.h
                             src/mtf.c src/mtf.h
                             src/pivot.c src/pivot.h
