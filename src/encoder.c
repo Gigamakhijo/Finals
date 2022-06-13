@@ -1,10 +1,13 @@
 #include "core.h"
+
 #include <stdio.h>
 
 int main(int argc, char *argv[]) {
   convert_protocol(argv[1], "encoder.protocol");
   // compress
-  convert_correction("encoder.protocol", "encoder.correction");
+  compress("encoder.protocol", "encoder.compressed");
+
+  convert_correction("encoder.compressed", "encoder.correction");
   convert_pivot("encoder.correction", "encoder.pivot");
 
   remove("encoder.protocol");

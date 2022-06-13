@@ -8,6 +8,7 @@ add_library(core src/core.h src/text.c src/text.h
                             src/bit.c src/bit.h
                             src/utils.c src/utils.h
                             src/correction.c src/correction.h
+                            src/lzss.c src/lzss.h
                             src/pivot.c src/pivot.h
                             src/protocol.c src/protocol.h)
 

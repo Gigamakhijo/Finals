@@ -3,6 +3,7 @@
 
 #include "bit.h"
 #include "correction.h"
+#include "lzss.h"
 #include "pivot.h"
 #include "protocol.h"
 #include "queue.h"
