@@ -1,4 +1,4 @@
-#include "protocol.h"
+#include "bin.h"
 #include "bit.h"
 #include "text.h"
 #include "utils.h"
@@ -213,7 +213,7 @@ void write_description(User *user, BITFILE *bf) {
   bwrite(CHAR, bf, &end, 7, 1);
 }
 
-void convert_protocol(char *input, char *output) {
+void bin_encode(char *input, char *output) {
   FILE *fp = fopen(input, "r");
   if (!fp) {
     perror("File opening failed");
@@ -235,11 +235,12 @@ void convert_protocol(char *input, char *output) {
 
   bflush(wbf);
   bclose(wbf);
+
   free_queue(user.items);
   free_queue(user.friends);
 }
 
-void revert_protocol(char *input, char *output) {
+void bin_decode(char *input, char *output) {
   BITFILE *rbf = bopen(input, "rb");
   User user;
   user.items = new_queue();
