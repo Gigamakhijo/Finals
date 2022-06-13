@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
   assert(argc > 2);
@@ -23,11 +24,19 @@ int main(int argc, char *argv[]) {
   } else
     fclose(fp);
 
+  strcat(user.description, "$");
+
+  char *bwt = bwt_encode(user.description);
+
+  char list[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$\n";
+  int *arr = mtf_encode(bwt, list);
+
   BITFILE *wbf = bopen(input, "wb");
   write_user(&user, wbf);
   write_item(&user, wbf);
   write_friend(&user, wbf);
-  write_description(&user, wbf);
+
+  bwrite(INT, wbf, arr, 7, strlen(bwt));
 
   bflush(wbf);
   bclose(wbf);

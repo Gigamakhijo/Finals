@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
   assert(argc > 2);
@@ -24,11 +25,35 @@ int main(int argc, char *argv[]) {
   read_user(rbf, &user);
   read_item(rbf, &user);
   read_friend(rbf, &user);
-  read_description(rbf, &user);
+
+  int arr[10000];
+
+  int index = 0;
+  while (1) {
+    int buffer;
+    bread(INT, rbf, &buffer, 7, 1);
+    if (feof(rbf->fp) == 1)
+      break;
+    arr[index++] = buffer;
+  }
 
   bclose(rbf);
 
-  write_text(&user, output);
+  char list[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$\n";
+
+  char *str = mtf_decode(arr, index, list);
+  char *bwt = bwt_decode(str);
+  free(str);
+
+  // remove $
+  bwt[strlen(bwt) - 1] = '\0';
+  int i;
+  for (i = 0; i < index; i++)
+    user.description[i] = bwt[i];
+  user.description[i] = '\0';
+  free(bwt);
+
+  write_text(&user, argv[2]);
 
   free_queue(user.items);
   free_queue(user.friends);
