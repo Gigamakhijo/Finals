@@ -35,7 +35,6 @@ int *mtf_encode(char *input_text, char *list) {
   int *output_arr = (int *)malloc(len_text * sizeof(int));
 
   for (i = 0; i < len_text; i++) {
-
     // Linear Searches the characters of input_text
     // in list
     output_arr[i] = search(input_text[i], list);

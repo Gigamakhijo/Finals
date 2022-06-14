@@ -8,10 +8,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_library(core src/core.h src/text.c src/text.h
                             src/queue.c src/queue.h
                             src/bit.c src/bit.h
+                            src/new_bit.c src/new_bit.h
                             src/utils.c src/utils.h
                             src/ecc.c src/ecc.h
                             src/bwt.c src/bwt.h
                             src/mtf.c src/mtf.h
+                            src/rle.c src/rle.h
                             src/pivot.c src/pivot.h
                             src/bin.c src/bin.h)
 
@@ -32,5 +34,10 @@ add_executable(test_mtf test/test_mtf.c)
 target_link_libraries(test_mtf core)
 target_include_directories(test_mtf PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
+add_executable(test_rle test/test_rle.c)
+target_link_libraries(test_rle core)
+target_include_directories(test_rle PUBLIC ${PROJECT_SOURCE_DIR}/src)
+
 add_test(test_bwt, ./test_bwt)
 add_test(test_mtf, ./test_mtf)
+add_test(test_rle, ./test_rle)

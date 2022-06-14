@@ -26,7 +26,8 @@ int main(int argc, char *argv[]) {
   read_item(rbf, &user);
   read_friend(rbf, &user);
 
-  int arr[10000];
+  int len = 64;
+  int *arr = malloc(sizeof(int) * len);
 
   int index = 0;
   while (1) {
@@ -35,22 +36,42 @@ int main(int argc, char *argv[]) {
     if (feof(rbf->fp) == 1)
       break;
     arr[index++] = buffer;
+    if (index >= len) {
+      len += 64;
+      arr = realloc(arr, sizeof(int) * len);
+    }
   }
 
   bclose(rbf);
 
+  printf("raw val: ");
+  for (int i = 0; i < index; i++)
+    printf("%d ", arr[i]);
+  putchar('\n');
+
+  int *dec = malloc(sizeof(int) * 10000);
+  len = rle_decode(dec, arr, index);
+
+  printf("rle decode: ");
+  for (int i = 0; i < len; i++)
+    printf("%d ", dec[i]);
+  putchar('\n');
+
   char list[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$\n";
 
-  char *str = mtf_decode(arr, index, list);
+  char *str = mtf_decode(dec, len, list);
+  free(dec);
+
+  printf("mtf decode: %s\n", str);
+
   char *bwt = bwt_decode(str);
   free(str);
 
+  printf("bwt decode: %s\n", bwt);
+
   // remove $
   bwt[strlen(bwt) - 1] = '\0';
-  int i;
-  for (i = 0; i < index; i++)
-    user.description[i] = bwt[i];
-  user.description[i] = '\0';
+  strcpy(user.description, bwt);
   free(bwt);
 
   write_text(&user, argv[2]);

@@ -27,16 +27,32 @@ int main(int argc, char *argv[]) {
   strcat(user.description, "$");
 
   char *bwt = bwt_encode(user.description);
+  printf("bwt encode: %s\n", bwt);
 
-  char list[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$\n";
+  char *list = (char *)malloc(sizeof(char) * 100);
+  strcpy(list, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$\n");
   int *arr = mtf_encode(bwt, list);
+
+  printf("mtf encode: ");
+  for (int i = 0; i < strlen(bwt); i++)
+    printf("%d ", arr[i]);
+  putchar('\n');
+
+  int *enc = malloc(sizeof(int) * strlen(bwt));
+  int len = rle_encode(enc, arr, strlen(bwt));
+
+  printf("rle encode: ");
+  for (int i = 0; i < len; i++)
+    printf("%d ", enc[i]);
+  putchar('\n');
 
   BITFILE *wbf = bopen(input, "wb");
   write_user(&user, wbf);
   write_item(&user, wbf);
   write_friend(&user, wbf);
 
-  bwrite(INT, wbf, arr, 7, strlen(bwt));
+  bwrite(INT, wbf, enc, 7, len);
+  free(enc);
 
   bflush(wbf);
   bclose(wbf);

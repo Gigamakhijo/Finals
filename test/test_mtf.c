@@ -6,11 +6,11 @@
 
 // Driver program to test functions above
 int main() {
-  char *input_text = "panama";
+  char *input_text = "PANAMA";
 
   // Maintains an ordered list of legal symbols
-  char *list = (char *)malloc(sizeof(char) * 26);
-  strcpy(list, "abcdefghijklmnopqrstuvwxyz");
+  char *list = (char *)malloc(sizeof(char) * 27);
+  strcpy(list, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$\n");
 
   printf("Input text: %s", input_text);
   printf("\nMove to Front Transform: ");
@@ -21,7 +21,7 @@ int main() {
     printf("%d ", arr[i]);
   putchar('\n');
 
-  strcpy(list, "abcdefghijklmnopqrstuvwxyz");
+  strcpy(list, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$\n");
   char *str = mtf_decode(arr, strlen(input_text), list);
   printf("%s\n", str);
 
