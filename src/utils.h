@@ -6,10 +6,11 @@
 
 #include "queue.h"
 
-#define MAXID 255
-#define MAXNAME 255
+#define MAXID 256
+#define MAXNAME 256
 #define MAXGENDER 8 // MALE: 5, FEMALE: 7
 #define ITEMCOUNT 6
+#define MAXDESCRIPTION 1001
 
 typedef struct Item {
   char name[MAXNAME];
@@ -36,7 +37,7 @@ typedef struct {
 
   Queue *friends;
 
-  char *description;
+  char description[MAXDESCRIPTION];
 } User;
 
 Item *new_item(void);

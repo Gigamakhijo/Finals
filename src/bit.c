@@ -21,11 +21,15 @@ void clearBF(BITFILE *bf) {
 int getMaskedBit(int shift) { return (int)((1 << shift) - 1); }
 
 // BitBuffer 내용 다 출력
-void bflush(BITFILE *bf) { fwrite(&bf->buffer, 1, 1, bf->fp); }
+void bflush(BITFILE *bf) {
+  if (bf->offset > 0)
+    fwrite(&bf->buffer, 1, 1, bf->fp);
+}
 // BitBuffer 초기화
 BITFILE *bopen(char *filename, char *mode) {
   FILE *fp = fopen(filename, mode);
-  if (fp == NULL) exit(1);
+  if (fp == NULL)
+    exit(1);
   // init BITFILE buffer
   BITFILE *bf = initBF(fp);
   return bf;
@@ -56,7 +60,8 @@ void fillBF(BITFILE *bf) {
 }
 
 void checkBF(BITFILE *bf) {
-  if (!isFullBF(bf)) return;
+  if (!isFullBF(bf))
+    return;
   bflush(bf);
   clearBF(bf);
 }
@@ -78,7 +83,7 @@ void breadInt(BITFILE *bf, int *data, int bitSize, int length) {
   for (int i = 0; i < length; i++) {
     *(data + i) = 0;
     for (int j = 0; j < bitSize; j++) {
-      if (bf->offset == 0) {  //비어있을시
+      if (bf->offset == 0) { //비어있을시
         fillBF(bf);
       }
 
@@ -103,7 +108,7 @@ void breadChar(BITFILE *bf, char *data, int bitSize, int length) {
   for (int i = 0; i < length; i++) {
     *(data + i) = 0;
     for (int j = 0; j < bitSize; j++) {
-      if (bf->offset == 0) {  //비어있을시
+      if (bf->offset == 0) { //비어있을시
         fillBF(bf);
       }
       *(data + i) = *(data + i) << 1;
@@ -114,22 +119,22 @@ void breadChar(BITFILE *bf, char *data, int bitSize, int length) {
 
 void bread(TYPE type, BITFILE *bf, void *data, int bitSize, int length) {
   switch (type) {
-    case INT:
-      breadInt(bf, data, bitSize, length);
-      break;
-    case CHAR:
-      breadChar(bf, data, bitSize, length);
-      break;
+  case INT:
+    breadInt(bf, data, bitSize, length);
+    break;
+  case CHAR:
+    breadChar(bf, data, bitSize, length);
+    break;
   }
 }
 
 void bwrite(TYPE type, BITFILE *bf, void *data, int bitSize, int length) {
   switch (type) {
-    case INT:
-      bwriteInt(bf, data, bitSize, length);
-      break;
-    case CHAR:
-      bwriteChar(bf, data, bitSize, length);
-      break;
+  case INT:
+    bwriteInt(bf, data, bitSize, length);
+    break;
+  case CHAR:
+    bwriteChar(bf, data, bitSize, length);
+    break;
   }
 }

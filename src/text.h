@@ -6,5 +6,6 @@
 #include "utils.h"
 
 int read_text(User *user, FILE *fp);
+void write_text(User *user, char * output);
 
 #endif

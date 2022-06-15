@@ -1,12 +1,20 @@
-#include <stdio.h>
-
 #include "core.h"
 
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
+
 int main(int argc, char *argv[]) {
+  assert(argc > 2);
+
+  char input[100];
+  char output[100];
+  sprintf(input, "%s.protocol", argv[2]);
+
   FILE *fp = fopen(argv[1], "r");
   if (!fp) {
     perror("File opening failed");
-    return -1;
+    exit(1);
   }
 
   User user;
@@ -16,36 +24,47 @@ int main(int argc, char *argv[]) {
   } else
     fclose(fp);
 
-  printf("id: %s\n", user.id);
-  printf("name: %s\n", user.name);
-  printf("gender: %s\n", user.gender);
-  printf("age: %d\n", user.age);
-  printf("hp: %d\n", user.hp);
-  printf("mp: %d\n", user.mp);
-  printf("coin: %d\n", user.coin);
+  strcat(user.description, "$");
 
-  printf("id: %d\n", user.coin);
+  char *bwt = bwt_encode(user.description);
+  printf("bwt encode: %s\n", bwt);
+
+  char *list = (char *)malloc(sizeof(char) * 100);
+  strcpy(list, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$\n");
+  int *arr = mtf_encode(bwt, list);
+
+  printf("mtf encode: ");
+  for (int i = 0; i < strlen(bwt); i++)
+    printf("%d ", arr[i]);
   putchar('\n');
 
-  Item *item;
-  while (q_len(user.items) > 0) {
-    item = dequeue(user.items);
-    printf("%s%d\n", item->name, item->count);
-    free_item(item);
-  }
+  int *enc = malloc(sizeof(int) * strlen(bwt));
+  int len = rle_encode(enc, arr, strlen(bwt));
+
+  printf("rle encode: ");
+  for (int i = 0; i < len; i++)
+    printf("%d ", enc[i]);
   putchar('\n');
 
-  Friend *friend;
-  for (int i = 1; q_len(user.friends) > 0; i++) {
-    friend = dequeue(user.friends);
-    printf("FRIEND%d ID: %s NAME: %s GENDER: %s AGE: %d\n", i, friend->id,
-           friend->name, friend->gender, friend->age);
-    free_friend(friend);
-  }
-  putchar('\n');
+  BITFILE *wbf = bopen(input, "wb");
+  write_user(&user, wbf);
+  write_item(&user, wbf);
+  write_friend(&user, wbf);
 
-  printf("%s", user.description);
+  bwrite(INT, wbf, enc, 7, len);
+  free(enc);
+
+  bflush(wbf);
+  bclose(wbf);
 
   free_queue(user.items);
   free_queue(user.friends);
+
+  sprintf(input, "%s.protocol", argv[2]);
+  sprintf(output, "%s.ecc", argv[2]);
+  ecc_encode(input, output);
+
+  sprintf(input, "%s.ecc", argv[2]);
+  sprintf(output, "%s", argv[2]);
+  pivot_encode(input, output);
 }

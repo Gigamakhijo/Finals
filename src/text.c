@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define STRSIZE 200
-#define MAXUSER 200
-#define MAXDESCRIPTION 1000
+#define STRSIZE 1000
+#define MAXUSER 255
+#define MAXDESCRIPTION 1001
 
 #define TEST_ZERO(cond)                                                        \
   if ((cond) == 0)                                                             \
@@ -134,11 +134,59 @@ int read_text(User *user, FILE *fp) {
     enqueue(user->friends, friend);
   } while (fgets(str, STRSIZE, fp) != NULL && *str == '\n');
 
-  char description[MAXDESCRIPTION];
+  int index = 0;
 
-  fread(description, sizeof(char), MAXDESCRIPTION, fp);
+  while (1) {
+    char buffer = fgetc(fp);
+    if (feof(fp) == 1)
+      break;
+    user->description[index++] = buffer;
+  }
+  user->description[index] = '\0';
 
-  user->description = description;
-
+  // fread(user->description, sizeof(char), MAXDESCRIPTION, fp);
+  // user->description[strlen(user->description)-1] = '\0';
   return 0;
+}
+
+void write_text(User *user, char *output) {
+  FILE *fp;
+  fp = fopen(output, "w");
+  if (fp == NULL)
+    exit(1);
+  fputs("*USER STATUS*\n", fp);
+  fprintf(fp, "ID: %s\n", user->id);
+  fprintf(fp, "NAME: %s\n", user->name);
+  fprintf(fp, "GENDER: %s\n", user->gender);
+  fprintf(fp, "AGE: %d\n", user->age);
+  fprintf(fp, "HP: %d\n", user->hp);
+  fprintf(fp, "MP: %d\n", user->mp);
+  fprintf(fp, "COIN: %d\n", user->coin);
+  fputc('\n', fp);
+
+  fputs("*ITEMS*\n", fp);
+
+  int item_count = q_len(user->items);
+  for (int k = 0; k < item_count; k++) {
+    Item *item = dequeue(user->items);
+    fprintf(fp, "%s: %d\n", item->name, item->count);
+  }
+  fputc('\n', fp);
+
+  fputs("*FRIENDS LIST*\n", fp);
+
+  int friend_count = q_len(user->friends);
+  for (int k = 0; k < friend_count; k++) {
+    Friend *friend = dequeue(user->friends);
+    fprintf(fp, "FRIEND%d ID: %s\n", k + 1, friend->id);
+    fprintf(fp, "FRIEND%d NAME: %s\n", k + 1, friend->name);
+    fprintf(fp, "FRIEND%d GENDER: %s\n", k + 1, friend->gender);
+    fprintf(fp, "FRIEND%d AGE: %d\n", k + 1, friend->age);
+    fputc('\n', fp);
+  }
+
+  fputs("*DESCRIPTION*\n", fp);
+  fprintf(fp, "%s", user->description);
+
+  fclose(fp);
 }

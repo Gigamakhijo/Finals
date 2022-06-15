@@ -28,7 +28,7 @@
 
 # Executables
 *.exe
-*.out
+#*.out
 *.app
 
 # CMake
@@ -45,7 +45,7 @@ CTestTestfile.cmake
 _deps
 
 # Compiled binaries specific to this project
-*.out
+#*.out
 
 # Vim
 [._]*.s[a-v][a-z]
@@ -53,3 +53,5 @@ _deps
 [._]s[a-rt-v][a-z]
 [._]ss[a-gi-z]
 [._]sw[a-p]
+
+build
